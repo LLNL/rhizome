@@ -83,3 +83,4 @@
                                   (fetch :raw))))))
     (add-index! :semco [:topic]))
   (println "semco done!"))
+  

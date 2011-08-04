@@ -1,10 +1,13 @@
 (ns trecproc.app
   (:gen-class)
+  (:use [incanter.core :only (matrix ncol sel)])
+  (:use [incanter.stats :only (covariance)])
+  (:use [trecproc.related :only (get-related)])
   (:use [trecproc.lda :only (do-lda do-semco)])
   (:use [trecproc.ingest :only (get-raw-chunks)])
   (:use [trecproc.turbo :only (get-ngrams)])      
   (:use [trecproc.mongo :only (mongo-connect)])
-  (:use [trecproc.stoplist :only (get-stop get-counts)])
+  (:use [trecproc.stoplist :only (get-stop get-counts scan-counts)])
   (:use [somnium.congomongo :only (fetch with-mongo mass-insert!
                                          insert! add-index!)])
   (:use [clojure.contrib.seq-utils :only (indexed)])
@@ -52,7 +55,13 @@
 ;; (do-lda 500 1000)
 ;; (do-semco)
 
-
+(defn do-related
+  "Generate topic-topic covariance values"
+  [T]
+  (with-mongo (mongo-connect)
+    (mass-insert! :related (get-related (fetch :theta) T))
+    (add-index! :related [:topic])))
+                                               
 (defn -main
   []
   (println "either change this and rebuild, or launch from repl/swank"))
