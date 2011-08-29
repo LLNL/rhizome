@@ -4,8 +4,8 @@
        
 (defmulti get-raw
   "Process TREC SGML file (or directory of same)"
-  (fn [_ val] (cond (directory? val) ::trecdir
-                    (file? val) ::trecfile)))
+  (fn [rootdir val] (cond (directory? (join rootdir val)) ::trecdir
+                          (file? (join rootdir val)) ::trecfile)))
 
 (defmethod get-raw ::trecfile
   [rootdir trecfile]
@@ -17,7 +17,8 @@
     (mapcat (partial get-raw newroot) (listdir newroot))))
           
 (defmethod get-raw :default
-  [rootdir _]
+  [rootdir unkn]
+  (println (format "rootdir = %s, unkn = %s" rootdir unkn))
   (throw (Throwable. (format "Non-file non-dir in: %s" (str rootdir)))))
    
 ;;

@@ -30,6 +30,7 @@
   "We only care about DOCNO and TEXT fields"
   [[tag attr & content]]
   (cond (= tag :DOCNO) {:docid (str/trim (first content))}
+        (= tag :HEADLINE) {:title (str/trim (:text (process-text content)))}
         (= tag :TEXT) (process-text content)))
         
 (defn process-doc

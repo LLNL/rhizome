@@ -4,20 +4,21 @@
 ;; 
 (ns trecproc.lda
   (:use semco)
-  (:use [clj-mallet.phi :only (get-likely-phi)])
-  (:use [clj-mallet.theta :only (get-theta)])
-  (:use [clj-mallet.sample :only (get-sample)])
-  (:use [clj-mallet.lda :only (run-lda
-                               write-topic-word
-                               write-document-topic
-                               write-sample
-                               write-topics
-                               write-documents)])                               
-  (:use [clj-mallet.instances :only (get-instance-list-from-iter
-                                     document-to-instance)])
+  (:use [chisel.phi :only (get-likely-phi)])
+  (:use [chisel.theta :only (get-theta)])
+  (:use [chisel.sample :only (get-sample)])
+  (:use [chisel.lda :only (run-lda
+                           write-topic-word
+                           write-document-topic
+                           write-sample
+                           write-topics
+                           write-documents)])                               
+  (:use [chisel.instances :only (get-instance-list-from-iter
+                                 document-to-instance)])
   (:use [token :only (*opennlp-stoplist* *opennlp-tokenizer*
                                          with-token process-text)])
   (:use [trecproc.mongo :only (mongo-connect)])
+  (:use [trecproc.solr :only (get-all-solr-docs)])
   (:require [clojure.string :as str])
   (:use [somnium.congomongo :only (with-mongo distinct-values
                                    fetch insert! add-index! mass-insert!)]))
@@ -35,7 +36,7 @@
                                   (concat *opennlp-stoplist* 
                                           (map :word (fetch :stop))))]
       (map (bound-fn* (partial make-inst process-text))
-           (fetch :raw)))))
+           (get-all-solr-docs)))))
 
 (defn do-lda
   "Do actual LDA run"
@@ -80,7 +81,7 @@
          :semco
          (semantic-coherence (get-topics)
                              (map (comp (bound-fn* process-text) get-document)
-                                  (fetch :raw))))))
+                                  (get-all-solr-docs))))))
     (add-index! :semco [:topic]))
   (println "semco done!"))
   
