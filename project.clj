@@ -10,7 +10,6 @@
                                               com.sun.jdmk/jmxtools
                                               com.sun.jmx/jmxri]]
                  [token "1.0.0-SNAPSHOT"]
-                 [turbotopics "1.0.0-SNAPSHOT"]
                  [semco "1.0.0-SNAPSHOT"]
                  [chisel "1.0.0-SNAPSHOT"]]
 

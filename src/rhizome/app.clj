@@ -1,8 +1,6 @@
 (ns rhizome.app
   (:gen-class)
   (:use clojure.contrib.command-line)
-  (:use [incanter.core :only (matrix ncol sel)])
-  (:use [incanter.stats :only (covariance)])
   (:use [rhizome.related :only (get-related)])
   (:use [rhizome.lda :only (do-lda do-semco)])
   (:use [rhizome.turbo :only (get-ngrams)])      
@@ -11,7 +9,6 @@
   (:use [rhizome.stoplist :only (get-stop get-counts scan-counts)])
   (:use [somnium.congomongo :only (fetch with-mongo mass-insert!
                                          insert! add-index!)])
-  (:use [clojure.contrib.seq-utils :only (indexed)])
   (:require [clojure.string :as str]))
 
 
@@ -66,7 +63,7 @@
      [mongoname "MongoDB database name" "topics"]     
      [solrhost "Solr index address" "localhost"]
      [solrport "Solr index port" "8983"]
-     [solrfields "Comma-separated list of Solr fields to model" "text"]
+     [solrfields "Comma-separated list of Solr fields to model" "title,text"]
      [solrtitle "Comma-separated list of Solr fields to model" nil]
      [stoplow "Low end of stoplist thresholds" "0"]
      [stophigh "High end of stoplist thresholds" "100"]
@@ -75,12 +72,13 @@
      [nsamp "Number of MCMC samples to take" "1000"]
      remaining]
     (let [solrconfig {:host solrhost :port (Integer/parseInt solrport)
-                      :fields (str/split solrfields #"\s+")
+                      :fields (str/split solrfields #",+")
                       :titlefield solrtitle
                       :stoplow (Integer/parseInt stoplow)
                       :stophigh (Integer/parseInt stophigh)
                       :stopthresh (Integer/parseInt stopthresh)}
-          mongoconfig {:host mongohost, :port (Integer/parseInt mongoport)
+          mongoconfig {:host mongohost
+                       :port (Integer/parseInt mongoport)
                        :dbname mongoname}
           ldaparams {:T (Integer/parseInt T)
                      :nsamp (Double/parseDouble nsamp)}]
@@ -107,4 +105,3 @@
             (println
              (format
               "Operation \"%s\" not understood, try -h for help" operation)))))))    
-

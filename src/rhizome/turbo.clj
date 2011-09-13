@@ -1,5 +1,5 @@
 (ns rhizome.turbo
-  (:use [turbotopics.app :only (do-ngrams create-corpus)])
+  (:use [rhizome.turbotopics.app :only (do-ngrams create-corpus)])
   (:require [clojure.string :as str]))        
  
 (defn make-sig-ngram
