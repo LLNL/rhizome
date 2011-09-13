@@ -2,7 +2,7 @@
 ;; Get LDA topic model from MALLET output text files,
 ;; do some processing, insert into MongoDB collection
 ;; 
-(ns trecproc.lda
+(ns rhizome.lda
   (:use semco)
   (:use [chisel.phi :only (get-likely-phi)])
   (:use [chisel.theta :only (get-theta)])
@@ -17,8 +17,7 @@
                                  document-to-instance)])
   (:use [token :only (*opennlp-stoplist* *opennlp-tokenizer*
                                          with-token process-text)])
-  (:use [trecproc.mongo :only (mongo-connect)])
-  (:use [trecproc.solr :only (get-all-solr-docs)])
+  (:use [rhizome.mongo :only (mongo-connect)])
   (:require [clojure.string :as str])
   (:use [somnium.congomongo :only (with-mongo distinct-values
                                    fetch insert! add-index! mass-insert!)]))
@@ -30,25 +29,27 @@
 
 (defn get-dociter
   "Construct processed document map"
-  []
+  [solrdocs]
   (with-token
     (binding [*opennlp-stoplist* (set
                                   (concat *opennlp-stoplist* 
                                           (map :word (fetch :stop))))]
       (map (bound-fn* (partial make-inst process-text))
-           (get-all-solr-docs)))))
+           solrdocs))))
 
 (defn do-lda
   "Do actual LDA run"
-  [T numiter]
-  (with-mongo (mongo-connect)
-      (let [instances (get-instance-list-from-iter (get-dociter))
-            topicmodel (run-lda instances T numiter)]
-        (write-topics topicmodel "la.topics")
-        (write-topic-word topicmodel "la.phi")
-        (write-document-topic topicmodel "la.theta")
-        (write-sample topicmodel "la.sample.gz")
-        (write-documents instances "la.malletdocs")
+  [mongoconfig ldaparams solrdocs]
+  (with-mongo (mongo-connect mongoconfig)
+      (let [instances (get-instance-list-from-iter (get-dociter solrdocs))
+            topicmodel (run-lda instances
+                                :T (:T ldaparams)
+                                :numiter (:nsamp ldaparams))]
+        (write-topics topicmodel "output.topics")
+        (write-topic-word topicmodel "output.phi")
+        (write-document-topic topicmodel "output.theta")
+        (write-sample topicmodel "output.sample.gz")
+        (write-documents instances "output.malletdocs")
         (mass-insert! :phi (get-likely-phi topicmodel))
         (add-index! :phi [:topic])
         (mass-insert! :sample (get-sample topicmodel))
@@ -71,8 +72,8 @@
   (:text doc))
   
 (defn do-semco
-  []
-  (with-mongo (mongo-connect)
+  [mongoconfig solrdocs]
+  (with-mongo (mongo-connect mongoconfig)
     (with-token
       (binding [*opennlp-stoplist* (set
                                     (concat *opennlp-stoplist* 
@@ -81,7 +82,7 @@
          :semco
          (semantic-coherence (get-topics)
                              (map (comp (bound-fn* process-text) get-document)
-                                  (get-all-solr-docs))))))
+                                  solrdocs)))))
     (add-index! :semco [:topic]))
   (println "semco done!"))
   

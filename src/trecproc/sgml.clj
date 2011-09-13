@@ -1,7 +1,7 @@
 ;;
 ;; Parse TREC SGML file
 ;;
-(ns trecproc.sgml
+(ns rhizome.sgml
   (:require [clojure.string :as str])
   (:use [swank.core :only (break)])
   (:use [pl.danieljanus.tagsoup :only (parse-string)])

@@ -1,4 +1,4 @@
-(ns trecproc.related
+(ns rhizome.related
   (:use [clojure.contrib.combinatorics :only (combinations)])
   (:use [incanter.core :only (matrix ncol sel)])
   (:use [incanter.stats :only (covariance)]))

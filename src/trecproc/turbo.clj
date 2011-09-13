@@ -1,4 +1,4 @@
-(ns trecproc.turbo
+(ns rhizome.turbo
   (:use [turbotopics.app :only (do-ngrams create-corpus)])
   (:require [clojure.string :as str]))        
  

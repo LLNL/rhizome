@@ -1,5 +1,5 @@
-(ns trecproc.ingest
-  (:use [trecproc.sgml :only (process-file)])
+(ns rhizome.ingest
+  (:use [rhizome.sgml :only (process-file)])
   (:use [fs :only (listdir join directory? file?)]))
        
 (defmulti get-raw
