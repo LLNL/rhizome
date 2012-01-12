@@ -1,21 +1,10 @@
-(comment
-
-  Utility functions
-  
-  )
-
 (ns rhizome.turbotopics.util
+  "Utility functions"
   (:use [clojure.contrib.string :only (blank?)]))
 
-(defn not-nil?
-  "Gets used often enough to justify..."
-  [v]
-  (not (nil? v)))
+(def not-nil? (comp not nil?))
 
-(defn not-blank?
-  "Gets used often enough to justify..."
-  [s]
-  (not (blank? s)))
+(def not-blank? (comp not blank?))
 
 (defn pfhmap
   "Poorly named pmap version of fmap, but only for hash-map"
@@ -25,6 +14,6 @@
               hm)))
 
 (defn pmapcat
-  "Parallel version of mapcat"
+  "Parallel mapcat"
   [f vs]
   (apply concat (pmap f vs)))

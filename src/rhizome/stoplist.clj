@@ -1,4 +1,5 @@
 (ns rhizome.stoplist
+  "Stoplist construction utilities"
   (:use [token :only (with-token process-text count-tokens)]))
 
 (defn echo-count

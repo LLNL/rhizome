@@ -1,4 +1,5 @@
 (ns rhizome.turbo
+  "Easily called functions for turbo-topics-style analysis"
   (:use [rhizome.turbotopics.app :only (do-ngrams create-corpus)])
   (:require [clojure.string :as str]))        
  

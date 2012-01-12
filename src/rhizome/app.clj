@@ -1,4 +1,5 @@
 (ns rhizome.app
+  "Run topic model analysis on corpus in preparation for Iris"
   (:gen-class)
   (:use clojure.contrib.command-line)
   (:use [rhizome.related :only (get-related)])
@@ -10,7 +11,6 @@
   (:use [somnium.congomongo :only (fetch with-mongo mass-insert!
                                          insert! add-index!)])
   (:require [clojure.string :as str]))
-
 
 ;;
 ;; Stopword generation

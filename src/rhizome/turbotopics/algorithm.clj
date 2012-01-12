@@ -1,10 +1,5 @@
-(comment
-
-  The actual Turbo Topics algorithm 
-  
-  )
-
 (ns rhizome.turbotopics.algorithm
+  "The actual Turbo Topics (style) algorithm"
   (:use [rhizome.turbotopics.util :only (not-nil?)])
   (:use [rhizome.turbotopics.permtest :only (null-score)])
   (:use [clojure.set :only (union)])

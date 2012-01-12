@@ -1,8 +1,5 @@
-;;
-;; Get LDA topic model from MALLET output text files,
-;; do some processing, insert into MongoDB collection
-;; 
 (ns rhizome.lda
+  "Code for running LDA and doing topic semantic coherence analysis"
   (:use semco)
   (:use [chisel.phi :only (get-likely-phi)])
   (:use [chisel.theta :only (get-theta)])
@@ -23,6 +20,7 @@
                                    fetch insert! add-index! mass-insert!)]))
 
 (defn make-inst
+  "Construct MALLET instance from a single document"
   [pt record]
   (println (:docid record))
   (document-to-instance [(:docid record) (str/join " " (pt (:text record)))]))
@@ -38,7 +36,7 @@
            solrdocs))))
 
 (defn do-lda
-  "Do actual LDA run"
+  "Do the actual LDA run"
   [mongoconfig ldaparams solrdocs]
   (with-mongo (mongo-connect mongoconfig)
       (let [instances (get-instance-list-from-iter (get-dociter solrdocs))
@@ -59,19 +57,25 @@
       topicmodel)))
 
 (defn get-topicwords
-  [topic]
-  (map :word (take 10 (reverse (sort-by :prob (:words topic))))))
+  "Extract the Top N topic words"
+  ([topic]
+     (get-topicwords topic 10))
+  ([topic N]
+     (map :word (take N (reverse (sort-by :prob (:words topic)))))))
 
 (defn get-topics
+  "Get Top N words from all topics"
   []
   (map get-topicwords (sort-by :topic (fetch :phi))))
 
 (defn get-document
+  "Get the raw text of a document"
   [doc]
   (println (:docid doc))
   (:text doc))
   
 (defn do-semco
+  "Do semantic coherence analysis of topics"
   [mongoconfig solrdocs]
   (with-mongo (mongo-connect mongoconfig)
     (with-token

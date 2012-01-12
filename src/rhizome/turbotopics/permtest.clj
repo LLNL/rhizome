@@ -1,10 +1,5 @@
-(comment
-
-  Permutation test 
-  
-  )
-
-(ns rhizome.turbotopics.permtest)
+(ns rhizome.turbotopics.permtest
+    "Permutation and significance testing")
 
 ;; Arbitrary threshold (until permutations are much faster...)
 ;; 

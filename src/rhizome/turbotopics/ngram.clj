@@ -1,10 +1,5 @@
-(comment
-
-  Functions for recursively identifying n-grams
-  
-  )
-
 (ns rhizome.turbotopics.ngram
+  "Functions for recursively identifying n-grams"
   (:use [clojure.contrib.seq-utils :only (indexed)])
   (:use [rhizome.turbotopics.util :only (pfhmap pmapcat not-nil?)])
   (:use [rhizome.turbotopics.bigram :only (get-occur-counts

@@ -12,7 +12,7 @@
                  [token "1.0.0-SNAPSHOT"]
                  [semco "1.0.0-SNAPSHOT"]
                  [chisel "1.0.0-SNAPSHOT"]]
-
-  :dev-dependencies [[swank-clojure "1.3.1"]]
+  :dev-dependencies [[swank-clojure "1.3.1"]
+                     [marginalia "0.3.2"]]
   :main rhizome.app)
                  

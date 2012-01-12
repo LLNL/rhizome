@@ -1,7 +1,5 @@
-;;
-;; MongoDB functionality
-;;
 (ns rhizome.mongo
+  "MongoDB functionality"
   (:use [somnium.congomongo :only (make-connection)]))         
 
 (defn mongo-connect

@@ -1,10 +1,5 @@
-(comment
-
-  Functions for identifying and counting bigrams
-  
-  )
-
 (ns rhizome.turbotopics.bigram
+  "Functions for identifying and counting bigrams"
   (:use [rhizome.turbotopics.util :only (pfhmap not-nil?)])
   (:use [clojure.contrib.generic.functor :only (fmap)]))
 
