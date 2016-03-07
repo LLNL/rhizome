@@ -2,13 +2,13 @@
 
 This software does the pre-processing necessary to use the iris latent
 topic feedback plugin for information retrieval.  At a high-level, the
-intended workflow is
+intended workflow is:
 
-1) User ingests corpus into Solr
-2) Run rhizome against Solr to populate a MongoDB instance with LDA topics
-3) Run iris as part of your Solr-based document search system
+1. User ingests corpus into Solr
+2. Run rhizome against Solr to populate a MongoDB instance with LDA topics
+3. Run iris as part of your Solr-based document search system
 
-This system is based on the KDD paper
+This system is based on the KDD paper:
 
 Latent Topic Feedback for Information Retrieval
 David Andrzejewski and David Buttler.
@@ -25,17 +25,19 @@ is given in runme.sh
 
 The following operations are used to populate a running MongoDB instance
 with the information Iris will need to function:
--count: count token frequence to help determine rare words cutoff threshold
--stop: use rare words cutoff threshold to construct a stoplist
--lda: run LDA on the corpus
--turbo: identify significant n-grams for each topic
--related: use topic-topic covariance to identify related topics for each topic
--semco: calculate semantic coherence scores for each topic
+
+- count: count token frequence to help determine rare words cutoff threshold
+- stop: use rare words cutoff threshold to construct a stoplist
+- lda: run LDA on the corpus
+- turbo: identify significant n-grams for each topic
+- related: use topic-topic covariance to identify related topics for each topic
+- semco: calculate semantic coherence scores for each topic
 
 The following command-line options (with defaults in parentheses)
 allow the user to specify parameters of the MongoDB instance, the Solr
 index, and the LDA topic model:
 
+```
 mongohost (localhost) = MongoDB host 
 mongoport (27017) = MongoDB port 
 mongoname (topics) = MongoDB database name 
@@ -48,12 +50,12 @@ stophigh (100) = High end of stoplist thresholds to print out for 'count'
 stopthresh (50) = Filter out rare words occurring < stopthresh times 
 T (100) = Number of latent topics to use 
 nsamp (1000) = Number of MCMC samples to take 
+```
 
 ## License
 
+This code is licensed under the terms of the GNU GPL license, the the [LICENSE.txt](/LICENSE.txt) file for full details.
+
 Copyright (c) 2012, Lawrence Livermore National Security, LLC. Produced at the Lawrence Livermore National Laboratory. Written by David Andrzejewski <david.andrzej@gmail.com>
-LLNL-CODE-521811 All rights reserved. This file is part of IRIS 
-Please also read the file LICENSE.txt  – Our Notice and GNU General Public License.
-This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License (as published by the Free Software Foundation) version 2, dated June 1991.
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the IMPLIED WARRANTY OF MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the terms and conditions of the GNU General Public License for more details.
-You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+
+LLNL-CODE-521811 All rights reserved. This file is part of IRIS.
